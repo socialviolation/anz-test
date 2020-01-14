@@ -1,15 +1,16 @@
 # ANZ-Test
 
-cicd process 
+## cicd process
 
-vendor
-test
-security
-build
-docker
-tag
-push
+- dependencies
+- test
+- security
+- docker - build app and container
+- tag
+- push
 
-https://github.com/GoogleContainerTools/distroless
-https://github.com/securego/gosec
-https://github.com/gorilla/mux
+## References:
+* https://github.com/GoogleContainerTools/distroless
+* https://github.com/securego/gosec
+* https://github.com/gorilla/mux
+* https://cloud.google.com/cloud-build/docs/deploying-builds/deploy-gke

@@ -28,7 +28,7 @@ type version struct {
 func getVersion() versionResponse {
 	sv := versionResponse{}
 	sv.App = append(sv.App, version{
-		Version:     os.Getenv("VERSION"),
+		Version:     os.Getenv("APP_VERSION"),
 		SHA:         os.Getenv("SHA"),
 		Description: description,
 	})

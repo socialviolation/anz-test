@@ -18,7 +18,7 @@ func TestConfiguration(t *testing.T) {
 }
 
 func TestGetVersion(t *testing.T) {
-	os.Setenv("VERSION", "0.1.2-test")
+	os.Setenv("APP_VERSION", "0.1.2-test")
 	os.Setenv("SHA", "949419ab387a681db0b447452090668cac8b6b55")
 
 	result := getVersion()
@@ -32,7 +32,7 @@ func TestGetVersion(t *testing.T) {
 }
 
 func TestVersionHandler(t *testing.T) {
-	os.Setenv("VERSION", "0.1.2-test")
+	os.Setenv("APP_VERSION", "0.1.2-test")
 	os.Setenv("SHA", "949419ab387a681db0b447452090668cac8b6b55")
 
 	response := httptest.NewRecorder()

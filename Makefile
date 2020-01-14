@@ -7,24 +7,16 @@ GOARCH ?= $(shell go env GOARCH)
 fmt:
 	go fmt ./...
 
-clean:
-	rm -rf coverage* && rm -rf vendor*
-	go clean ./...
-
-vendor:
-	go mod vendor
-
-test: vendor
+test:
 	go test -coverprofile=$(COV_FILE).out -covermode=count  ./...
 	go tool cover -html=$(COV_FILE).out -o $(COV_FILE).html
+	open $(COV_FILE).html
 
-build:
-	go build -o bin/$(APP_NAME) .
+run:
+	docker run -p 8080:8080 -t $(APP_NAME)
 
-docker:
-	docker build -t $(APP_NAME) .
-	docker run -p 8080:8080 -t $(APP_NAME) 
+local-build:
+	./build.sh
 
-
-submit-cloudbuild:
-	cloud builds submit . --config=cloudbuild.yaml
+remote-build:
+	gcloud builds submit . --config=cloudbuild.yaml

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anz-test
+  namespace: technical-test
+  labels:
+    app: anz-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: anz-test
+  template:
+    metadata:
+      labels:
+        app: anz-test
+    spec:
+      containers:
+      - name: anz-test
+        image: gcr.io/compact-voyager-253904/anz-test:latest
+        ports:
+        - containerPort: 8080

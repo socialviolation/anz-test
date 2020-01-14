@@ -1,38 +1,48 @@
 steps:
-  - id: vendor
+  - id: "Go Dependencies"
     name: mirror.gcr.io/library/golang
-    args: ["go", "mod", "vendor"]
-    env: 
+    args: ["go", "mod", "download"]
+    env:
     - GO111MODULE=on
     - GOPROXY=https://proxy.golang.org
     volumes:
     - name: go-modules
       path: /go
-  - id: test
+
+  - id: "Go Tests"
     name: mirror.gcr.io/library/golang
     args: ["go", "test", "./..."]
-    env: 
-    - GO111MODULE=on
-    volumes:
-    - name: go-modules
-      path: /go
-  - id: gosec
-    name: securego/gosec
-    args: [".", "/"]
-    volumes:
-    - name: go-modules
-      path: /go
-  - id: build_application
-    name: mirror.gcr.io/library/golang
-    args: ["go", "build", "-o", "anz-test", "."]
     env:
     - GO111MODULE=on
     volumes:
     - name: go-modules
       path: /go
-  - id: build_image
+
+  - id: "Go Security"
+    name: securego/gosec
+    args: [".", "/"]
+    volumes:
+    - name: go-modules
+      path: /go
+
+  - id: "Build Image"
     name: "gcr.io/cloud-builders/docker"
-    args: ["build", "--tag=gcr.io/$PROJECT_ID/anz-test", "."]
-  - id: docker_image_push
+    entrypoint: "./build.sh"
+    env:
+    - PROJECT_ID=$PROJECT_ID
+    - CLOUDBUILD=true
+
+  - id: "Push Image"
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/anz-test"]
+
+  - id: "Deploy to Cluster"
+    name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/anz-test', 'container=gcr.io/$PROJECT_ID/anz-test']
+    env:
+    - 'CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}'
+
+substitutions:
+  _CLOUDSDK_COMPUTE_ZONE: ap-southeast1-b
+  _CLOUDSDK_CONTAINER_CLUSTER: anz-test-cluster
