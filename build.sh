@@ -6,12 +6,12 @@ SHA=$(git rev-parse HEAD)
 # CLOUDBUILD env variable is set in cloudbuild step:build_image,
 # which triggers this build script
 if [[ -n "${CLOUDBUILD}" ]]; then
-        CONTAINER_TAG="gcr.io/${PROJECT_ID}/anz-test:${SHA}"
+        CONTAINER_TAGS="-t gcr.io/${PROJECT_ID}/anz-test:${SHA} -t gcr.io/${PROJECT_ID}/anz-test:latest"
 else
-        CONTAINER_TAG="anz-test"
+        CONTAINER_TAGS="-t anz-test:${SHA} -t anz-test:latest"
 fi
 
 docker build \
         --build-arg APP_VERSION=$(cat version.txt) \
         --build-arg SHA=${SHA} \
-        -t ${CONTAINER_TAG} .
+        ${CONTAINER_TAGS} .

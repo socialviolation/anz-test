@@ -1,3 +1,8 @@
+substitutions:
+  _CLOUDSDK_COMPUTE_ZONE: australia-southeast1-b
+  _CLOUDSDK_CONTAINER_CLUSTER: anz-test-cluster
+  _APP_NAME: anz-test
+
 steps:
   - id: "Go Dependencies"
     name: mirror.gcr.io/library/golang
@@ -34,15 +39,21 @@ steps:
 
   - id: "Push Image"
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/anz-test"]
+    args: ["push", "gcr.io/$PROJECT_ID/${_APP_NAME}"]
 
   - id: "Deploy to Cluster"
-    name: 'gcr.io/cloud-builders/kubectl'
-    args: ['set', 'image', 'deployment/anz-test', 'container=gcr.io/$PROJECT_ID/anz-test']
-    env:
-    - 'CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}'
-    - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}'
+    name: "gcr.io/cloud-builders/gke-deploy:stable"
+    args:
+    - run
+    - --filename=kube/
+    - --image=gcr.io/$PROJECT_ID/${_APP_NAME}:latest
+    - --location=${_CLOUDSDK_COMPUTE_ZONE}
+    - --cluster=${_CLOUDSDK_CONTAINER_CLUSTER}
 
-substitutions:
-  _CLOUDSDK_COMPUTE_ZONE: ap-southeast1-b
-  _CLOUDSDK_CONTAINER_CLUSTER: anz-test-cluster
+  # - id: "Deploy to Cluster"
+  #   name: 'gcr.io/cloud-builders/kubectl'
+  #   args: ['set', 'image', 'deployment/${_APP_NAME}', 'container=gcr.io/$PROJECT_ID/${_APP_NAME}']
+  #   env:
+  #   - 'CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}'
+  #   - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}'
+
