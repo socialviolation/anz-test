@@ -32,17 +32,22 @@ func getVersion() map[string][]version {
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%+v", r)
+	// log.Printf("%+v", r)
+	log.Println("called")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(getVersion())
 }
 
-func main() {
+func setupRoutes() *mux.Router {
 	r := mux.NewRouter()
-
-	r.HandleFunc("/", versionHandler).Methods("GET")
 	r.HandleFunc("/version", versionHandler).Methods("GET")
+
+	return r
+}
+
+func main() {
+	router := setupRoutes()
 	log.Printf("%s listening on port %s...", appName, port)
 
-	log.Fatal(http.ListenAndServe(port, r))
+	log.Fatal(http.ListenAndServe(port, router))
 }
