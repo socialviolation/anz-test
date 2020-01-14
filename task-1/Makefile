@@ -26,4 +26,5 @@ build-run: build run
 local-ci: fmt deps test gosec build run
 
 remote-build:
-	gcloud builds submit . --config=cloudbuild.yaml
+	# as we are using git for the last commit sha, need to send .git to build
+	gcloud builds submit .. --config=./cloudbuild.yaml

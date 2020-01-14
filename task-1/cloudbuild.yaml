@@ -5,6 +5,7 @@ steps:
   - id: "Go Dependencies"
     name: mirror.gcr.io/library/golang
     args: ["go", "mod", "download"]
+    dir: task-1
     env:
     - GO111MODULE=on
     - GOPROXY=https://proxy.golang.org
@@ -15,6 +16,7 @@ steps:
   - id: "Go Tests"
     name: mirror.gcr.io/library/golang
     args: ["go", "test", "./..."]
+    dir: task-1
     env:
     - GO111MODULE=on
     volumes:
@@ -24,6 +26,7 @@ steps:
   - id: "Go Security"
     name: securego/gosec
     args: [".", "/"]
+    dir: task-1
     volumes:
     - name: go-modules
       path: /go
@@ -31,6 +34,7 @@ steps:
   - id: "Build Image"
     name: "gcr.io/cloud-builders/docker"
     entrypoint: "./build.sh"
+    dir: task-1
     env:
     - PROJECT_ID=$PROJECT_ID
     - CLOUDBUILD=true
@@ -38,5 +42,6 @@ steps:
   - id: "Push Image"
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/${_APP_NAME}"]
+    dir: task-1
 
 images: ["gcr.io/$PROJECT_ID/${_APP_NAME}"]
