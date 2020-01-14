@@ -1,0 +1,38 @@
+steps:
+  - id: vendor
+    name: mirror.gcr.io/library/golang
+    args: ["go", "mod", "vendor"]
+    env: 
+    - GO111MODULE=on
+    - GOPROXY=https://proxy.golang.org
+    volumes:
+    - name: go-modules
+      path: /go
+  - id: test
+    name: mirror.gcr.io/library/golang
+    args: ["go", "test", "./..."]
+    env: 
+    - GO111MODULE=on
+    volumes:
+    - name: go-modules
+      path: /go
+  - id: gosec
+    name: securego/gosec
+    args: [".", "/"]
+    volumes:
+    - name: go-modules
+      path: /go
+  - id: build_application
+    name: mirror.gcr.io/library/golang
+    args: ["go", "build", "-o", "anz-test", "."]
+    env:
+    - GO111MODULE=on
+    volumes:
+    - name: go-modules
+      path: /go
+  - id: build_image
+    name: "gcr.io/cloud-builders/docker"
+    args: ["build", "--tag=gcr.io/$PROJECT_ID/anz-test", "."]
+  - id: docker_image_push
+    name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/anz-test"]

@@ -24,3 +24,7 @@ build:
 docker:
 	docker build -t $(APP_NAME) .
 	docker run -p 8080:8080 -t $(APP_NAME) 
+
+
+submit-cloudbuild:
+	cloud builds submit . --config=cloudbuild.yaml

@@ -38,7 +38,10 @@ func getVersion() versionResponse {
 func versionHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%+v", r)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(getVersion())
+	err := json.NewEncoder(w).Encode(getVersion())
+	if err != nil {
+		log.Printf("Error occurred encoding response: %v", err)
+	}
 }
 
 func setupRoutes() *mux.Router {
