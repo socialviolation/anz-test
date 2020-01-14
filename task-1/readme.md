@@ -19,10 +19,11 @@ For local development, you can run `make local-ci`, which will perform a local v
 This webserver has been setup to use [CloudBuild](https://cloud.google.com/cloud-build/) as a target to perform the following, any time the github repository is pushed to:
 
 1. Download third-party deps using a `GOPROXY`
-2. Run unit tests
-4. Run `gosec`
-5. Build and tag the docker image
-6. Push the Docker image to GCR
+2. Run unit tests.
+   - run locally for coverage: make test
+3. Run `gosec`, which will scan code for common security issues
+4. Build and tag the docker image with SHA and latest
+5. Push the Docker image to GCR
    - _deploying the container is done in task-2_
 
 However this can also be manually triggered:
