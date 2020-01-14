@@ -1,0 +1,14 @@
+substitutions:
+  _CLOUDSDK_COMPUTE_ZONE: australia-southeast1-b
+  _CLOUDSDK_CONTAINER_CLUSTER: anz-test-cluster
+  _APP_NAME: anz-test
+
+steps:
+  - id: "Deploy to Cluster"
+    name: "gcr.io/cloud-builders/gke-deploy:stable"
+    args:
+      - run
+      - --filename=kube-anz-test/
+      - --image=gcr.io/$PROJECT_ID/${_APP_NAME}:latest
+      - --location=${_CLOUDSDK_COMPUTE_ZONE}
+      - --cluster=${_CLOUDSDK_CONTAINER_CLUSTER}
