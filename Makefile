@@ -1,4 +1,4 @@
-BINARY_NAME=anz-test
+APP_NAME=anz-test
 COV_FILE=coverage
 
 GOOS ?= $(shell go env GOOS)
@@ -19,4 +19,8 @@ test: vendor
 	go tool cover -html=$(COV_FILE).out -o $(COV_FILE).html
 
 build:
-	go build -o bin/$(BINARY_NAME) .
+	go build -o bin/$(APP_NAME) .
+
+docker:
+	docker build -t $(APP_NAME) .
+	docker run -p 8080:8080 -t $(APP_NAME) 

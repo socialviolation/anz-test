@@ -15,15 +15,19 @@ const (
 	port        = ":8080"
 )
 
+type versionResponse struct {
+	App []version `json:"myapplication"`
+}
+
 type version struct {
 	Version     string `json:"version"`
 	SHA         string `json:"lastcommitsha"`
 	Description string `json:"description"`
 }
 
-func getVersion() map[string][]version {
-	sv := make(map[string][]version)
-	sv[appName] = append(sv[appName], version{
+func getVersion() versionResponse {
+	sv := versionResponse{}
+	sv.App = append(sv.App, version{
 		Version:     os.Getenv("VERSION"),
 		SHA:         os.Getenv("SHA"),
 		Description: description,
@@ -32,8 +36,7 @@ func getVersion() map[string][]version {
 }
 
 func versionHandler(w http.ResponseWriter, r *http.Request) {
-	// log.Printf("%+v", r)
-	log.Println("called")
+	log.Printf("%+v", r)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(getVersion())
 }

@@ -23,10 +23,9 @@ func TestGetVersion(t *testing.T) {
 
 	result := getVersion()
 
-	assert.Equal(t, len(result), 1)
-	assert.Equal(t, len(result[appName]), 1, "should have a single version for the application")
+	assert.Equal(t, len(result.App), 1)
 
-	v := result[appName][0]
+	v := result.App[0]
 	assert.Equal(t, v.Version, "0.1.2-test", "version should be os env var")
 	assert.Equal(t, v.SHA, "949419ab387a681db0b447452090668cac8b6b55", "sha should be os env var")
 	assert.Equal(t, v.Description, description, "description should be const value")
