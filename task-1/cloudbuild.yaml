@@ -1,6 +1,4 @@
 substitutions:
-  _CLOUDSDK_COMPUTE_ZONE: australia-southeast1-b
-  _CLOUDSDK_CONTAINER_CLUSTER: anz-test-cluster
   _APP_NAME: anz-test
 
 steps:
