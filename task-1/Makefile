@@ -26,4 +26,4 @@ build-run: build run
 local-ci: fmt deps test gosec build run
 
 remote-build:
-	gcloud builds submit . --config=cloudbuild.yaml
+	gcloud builds submit .. --config=../cloudbuild.yaml

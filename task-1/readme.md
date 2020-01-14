@@ -1,7 +1,7 @@
 # ANZ-Test
 ANZ-Test is a golang webserver that dynamically returns the application's name, version, commit SHA and description.
 
-The **APP_VERSION** & **COMMIT_SHA** are determined by the file `./version.txt`. The contents of the file are passed to the "Build Image" step as a part of the CloudBuild pipeline, and stored as an environment variable in the image. The web server will read the environment variable when a request is recieved.
+The **APP_VERSION** is determined by the file `./version.txt`, and the **COMMIT_SHA** is determined by the commit the build is based off of. Both are passed as variables to the "Build Image" step as a part of the CloudBuild pipeline, and stored as an environment variable in the image. The web server will read the environment variable when a `/version` request is recieved.
 
 ## Requirements
 To run this webserver, you will need to have installed and configured:
@@ -39,6 +39,7 @@ Simply run `make remote-build` to manually trigger a cloud build
 * Cloudbuilds can manually be triggered, and as a result can deploy code straight to production that has not been checked in or verified. This is very very naughty.
 * CloudBuild doesn't provide any nice reports, and either all succeeds, or fails. Feedback can sometimes be a bit lacking.
 * CloudBuild will not currently fail if the code has not been formatted or vetted. Could be added.
+*
 
 ## References:
 * https://github.com/GoogleContainerTools/distroless
